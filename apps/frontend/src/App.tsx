@@ -5,7 +5,7 @@ import { Signup } from "./pages/SignupPage";
 import { LandingPage } from "./pages/LandingPage";
 import { HomePage  } from "./pages/HomePage";
 import { Dashboard } from "./components/homepage/Dashboard";
-import { Leaderboard } from "./components/homepage/Leaderboard";
+import  Leaderboard  from "./components/homepage/Leaderboard";
 import { Players } from "./components/homepage/Player";
 export function App() {
   return <>
