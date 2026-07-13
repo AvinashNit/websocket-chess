@@ -7,6 +7,7 @@ import WelcomeCard from "@/components/dashboard/WelcomeCard";
 import StatsCard from "@/components/dashboard/StatsCard";
 import OnlinePlayers from "@/components/dashboard/OnlinePlayers";
 import RecentGames from "@/components/dashboard/RecentGames";
+import { Board } from "../chesscomponent/GameBoard";
 
 const Dashboard = () => {
   const {
@@ -116,7 +117,7 @@ const Dashboard = () => {
 
           <RecentGames games={dashboard.recentGames} />
         </div>
-
+        
       </div>
     </main>
   );

@@ -1,15 +1,32 @@
-import express from "express";
-import cors from "cors";
-const app = express();
+import http from "http";
+import { WebSocketServer } from "ws";
 
-app.use( express.json() );
-
-
-app.use( cors() );
+const server = http.createServer();
 
 
 
+server.on("request", ( req, res )=>{
+    console.log( req.url )
+    res.write("Hello");
+    res.end();
+})
 
-const server  = app.listen( 3000, ()=>{
-    console.log(`server runnig over http://localhost:3000`)
-} )
+
+const wss = new WebSocketServer({
+    server,
+    path:"/ws"
+})
+
+
+wss.on("connection", ( ws, req )=>{
+    console.log( req.url );
+    ws.on("message", ( message )=>{
+        wss.clients.forEach( ws1 => ws1.send( message ) )
+    })
+    
+})
+
+
+server.listen(3000,()=>{
+    console.log("Server started on port 3000")
+})

@@ -11,6 +11,7 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.3.2",
     "axios": "^1.18.1",
+    "chess.js": "^1.4.0",
     "lucide-react": "^1.24.0",
     "react": "^19",
     "react-chessboard": "^5.10.0",

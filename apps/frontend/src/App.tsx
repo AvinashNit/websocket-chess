@@ -7,6 +7,7 @@ import { HomePage  } from "./pages/HomePage";
 import { Dashboard } from "./components/homepage/Dashboard";
 import  Leaderboard  from "./components/homepage/Leaderboard";
 import { Players } from "./components/homepage/Player";
+import { Board } from "./components/chesscomponent/GameBoard";
 export function App() {
   return <>
     
@@ -21,7 +22,7 @@ export function App() {
             <Route path="players" element={<Players />} />
             <Route path="leaderboard" element={<Leaderboard />} />
          </Route>
-        
+        <Route path="/play-chess" element={ <Board></Board>}></Route>
       </Routes>
   
       </>
