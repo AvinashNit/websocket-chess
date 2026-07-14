@@ -12,7 +12,7 @@ const waitingPlayers :string[] = [];
 const ActiveGame :{
     userA: string,
     userB: string,
-    chessInstance : object
+    chessInstance : Chess
 }[] = [];
 
 
@@ -87,13 +87,36 @@ export class Websocketserver{
                 }
                     
             })
+
+            ws.on("message", ( message ) => this.handleMessage( id , JSON.parse( message.toString() ) as { event: string, 
+                data?: string | Record< string, unknown >
+            } ) )
           
            
         })
     }
 
     
-    
+    private handleMessage( id: string , message:{ event: string, data?: string | Record< string, unknown> }  ){
+            if( message.event === "move" )
+            {
+                const data  =  message.data as Record< string, unknown >;
+
+                const gameData = ActiveGame.find( game => game.userA === id  || game.userB === id )
+                const userASocket = Players.get( gameData!.userA );
+                const userBSocket = Players.get( gameData!.userB );
+                const moved = gameData?.chessInstance.move(
+                    {
+                        from: data.from as string,
+                        to: data.to as string
+                    }
+                )
+                userASocket!.send( JSON.stringify({ event:"update", data: gameData?.chessInstance.fen() }));
+                userBSocket!.send( JSON.stringify({ event:"update", data:gameData?.chessInstance.fen()}));
+            }
+
+    }
+
 
    
    

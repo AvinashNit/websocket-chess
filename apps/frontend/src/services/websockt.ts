@@ -1,6 +1,14 @@
+interface message  {
+    event: string,
+    data?: Record< string, unknown > | string 
+}
+
+import { useGameStore } from "@/store/game.store";
+
+
 
 class Websocket{
-    private ws: WebSocket | null = null;
+    private ws : WebSocket | null = null; 
 
     connect()
     {
@@ -18,11 +26,13 @@ class Websocket{
         }
     }
 
-    handleMessage( message : string ){
-        console.log( message )
+    handleMessage( message : message ){
+        if( message.event === "update")
+            useGameStore.getState().setFen( message.data as string )
+
     }
 
-    send( message : string  ){
+    send( message : string   ){
         this.ws?.send( message )
     }
 

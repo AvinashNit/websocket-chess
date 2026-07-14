@@ -1,4 +1,5 @@
 import { Swords } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export interface PlayerCardProps {
   id: string;
@@ -16,6 +17,7 @@ export default function PlayerCard({
   onChallenge,
 }: PlayerCardProps) {
   const available = status === "available";
+  const navigate = useNavigate();
 
   return (
     <div className="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-900 p-6 transition-all duration-300 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/10">
@@ -59,7 +61,7 @@ export default function PlayerCard({
 
         <button
           disabled={!available}
-          onClick={() => onChallenge?.(id)}
+          onClick={() => navigate("/play-chess")}
           className={`flex items-center gap-2 rounded-xl px-5 py-2 font-medium transition-all duration-300 ${
             available
               ? "bg-emerald-500 hover:bg-emerald-600 active:scale-95 cursor-pointerclea"

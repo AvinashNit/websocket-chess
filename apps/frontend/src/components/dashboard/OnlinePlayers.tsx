@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { type OnlinePlayer } from "../../types/dashboard.types";
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
 }
 
 const OnlinePlayers = ({ players }: Props) => {
+    const navigate = useNavigate();
 
     return (
 
@@ -50,7 +52,8 @@ const OnlinePlayers = ({ players }: Props) => {
                         </div>
 
                         <button
-                            className="rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-500"
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-500" 
+                            onClick= { ()=> navigate("/play-chess") }
                         >
                             Challenge
                         </button>
