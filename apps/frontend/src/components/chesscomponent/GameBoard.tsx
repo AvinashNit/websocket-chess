@@ -5,6 +5,10 @@ import { Chess, type Piece } from "chess.js";
 export function Board()
 {
     const gameRef =  useRef( new Chess() )
+    // console.log(gameRef.current.turn())
+    // console.log(gameRef.current.moves())
+    // console.log( gameRef.current.squareColor("b5"))
+    // console.log( gameRef.current.isGameOver(), )
     const [ curFen , setFen ] = useState( gameRef.current.fen() )
     const onDrop = useCallback(({ piece, sourceSquare, targetSquare })=>{
         try{
@@ -13,7 +17,7 @@ export function Board()
               to: targetSquare,
               promotion:"q"
             })
-
+            console.log( move )
             setFen( gameRef.current.fen() )
             return true;
         }

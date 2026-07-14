@@ -1,30 +1,89 @@
 import { WebSocketServer } from "ws";
+import http from "http";
+import  { Chess }  from "chess.js"
+import { connect } from "http2";
 
-const PLAYERS = [];
+type chess = typeof Chess;
 
-class createServer{
-    private wss : WebSocketServer | null = null;
-    constructor( server )
+
+const Players : Map< string, WebSocket > = new Map();
+
+const waitingPlayers :string[] = [];
+
+const ActiveGame :{
+    userA: string,
+    userB: string,
+    chessInstance : object
+}[] = [];
+
+
+export class Websocketserver{
+    private  wsserver : WebSocketServer | null = null;
+
+    constructor( httpServer : http.Server )
     {
-        this.wss =  new WebSocketServer({
-            server,
+        this.wsserver = new WebSocketServer({
+            server:httpServer,
             path:"/ws"
+        });
+
+        this.handleConnection()
+    }
+
+     handleConnection(){
+        this.wsserver?.on("connection", ( ws: WebSocket , req )=>{
+            const id =  "player"+generateId();
+            Players.set( id, ws );
+            ws.send( JSON.stringify({
+                id
+            }))
+            if( waitingPlayers.length != 0 )
+            {
+                const chessInstance   = new Chess();
+
+                const opponenet = waitingPlayers.shift();
+                ActiveGame.push({
+                    userA: id,
+                    userB: opponenet as string ,
+                    chessInstance : chessInstance
+
+                })
+
+                Players.forEach( ( wsInstance , localId ) => {
+                    if( localId === id || localId === opponenet )
+                        wsInstance.send( JSON.stringify({
+                            message:"Hello user",
+                            connectTo : localId
+                        }) )
+                })
+            }
+            else{
+                waitingPlayers.push( id );
+            }
+            console.log("connected")
+            console.log( ws );
+            console.log( req )
         })
-
-
-        this.wss.on("connection", this.handleConnection )
     }
 
-    handleConnection(  ws: WebSocket  ){
-        const token = ws
-    }
-
-    handleIncomingMessage(){
-
-    }
-
-    handleClose(){
+    close( ws: WebSocket ){
         
+
+        })
     }
+
 
 }
+
+
+function idge(){
+    let id = 0
+ return function generateId()
+{
+   return  ++id;
+}
+
+;
+}
+
+const generateId = idge();

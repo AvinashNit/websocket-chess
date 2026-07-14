@@ -1,4 +1,3 @@
-import { useMessage } from "@/store/message.store";
 
 class Websocket{
     private ws: WebSocket | null = null;
@@ -14,10 +13,14 @@ class Websocket{
         }
         
         this.ws.onmessage = ( message ) =>{
-            handleMessage( JSON.parse(message.data.toString()));
+            this.handleMessage( JSON.parse( message.data.toString() ));
+
         }
     }
 
+    handleMessage( message : string ){
+        console.log( message )
+    }
 
     send( message : string  ){
         this.ws?.send( message )
@@ -29,19 +32,6 @@ class Websocket{
     }
 
 }
-
-
-function handleMessage( message )
-{
-    if( message.type ===  "postion" )
-        setstoe( )
-}
-
-
-
-
-
-
 
 
 export const client = new Websocket();
