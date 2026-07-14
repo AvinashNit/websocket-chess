@@ -1,7 +1,6 @@
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
 import  { Chess }  from "chess.js"
-import { connect } from "http2";
 
 type chess = typeof Chess;
 
@@ -18,7 +17,7 @@ const ActiveGame :{
 
 
 export class Websocketserver{
-    private  wsserver : WebSocketServer | null = null;
+    private  wsserver : WebSocketServer 
 
     constructor( httpServer : http.Server )
     {
@@ -30,10 +29,11 @@ export class Websocketserver{
         this.handleConnection()
     }
 
-     handleConnection(){
-        this.wsserver?.on("connection", ( ws: WebSocket , req )=>{
+    handleConnection(){
+        this.wsserver?.on("connection", ( ws: WebSocket , req: http.ClientRequest )=>{
             const id =  "player"+generateId();
             Players.set( id, ws );
+            
             ws.send( JSON.stringify({
                 id
             }))
@@ -42,6 +42,7 @@ export class Websocketserver{
                 const chessInstance   = new Chess();
 
                 const opponenet = waitingPlayers.shift();
+
                 ActiveGame.push({
                     userA: id,
                     userB: opponenet as string ,
@@ -50,28 +51,52 @@ export class Websocketserver{
                 })
 
                 Players.forEach( ( wsInstance , localId ) => {
-                    if( localId === id || localId === opponenet )
+                    if(  localId === opponenet )
                         wsInstance.send( JSON.stringify({
-                            message:"Hello user",
-                            connectTo : localId
+                            message:"Hello champ",
+                            ["Your opponenet"] : id
                         }) )
+                    ws.send( JSON.stringify({
+                        message:"Hello Champ ",
+                        ["Your Opponent"]: opponenet
+                    }))
                 })
             }
             else{
                 waitingPlayers.push( id );
             }
-            console.log("connected")
-            console.log( ws );
-            console.log( req )
+            
+            ws.on("close", ()=>{
+                console.log( "deleting player " , id )
+                Players.delete( id );
+                let index = waitingPlayers.findIndex( ( player ) =>  player === id )
+                if( index >= 0)
+                {
+                    waitingPlayers.splice( index,1 );
+                }
+                index = ActiveGame.findIndex( game => game.userA === id ||  game.userB === id );
+                if( index >=0 )
+                {
+                    const gameM = ActiveGame[ index ];
+                    if( gameM?.userA !== id )
+                        waitingPlayers.push( gameM!.userA )
+                    else
+                        waitingPlayers.push( gameM.userB );
+
+                    ActiveGame.splice(index,1);
+                }
+                    
+            })
+          
+           
         })
     }
 
-    close( ws: WebSocket ){
-        
+    
+    
 
-        })
-    }
-
+   
+   
 
 }
 
