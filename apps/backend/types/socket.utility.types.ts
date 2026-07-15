@@ -7,7 +7,7 @@ export type handleConnection = ( ws: WebSocket, req: http.ClientRequest ) => voi
 export type closeFunction = ( ws : WebSocket ) => void ;
 
 
-export type handleMessage  = ( ws: WebSocket , message:JSON ) => void ;
+export type andleIncomingMessage  = ( ws: WebSocket , message:JSON ) => void ;
 
 
 export type sendMessage  = ( ws: WebSocket , message: string ) => void ;
