@@ -11,6 +11,14 @@ export const getPlayerId  = ( _ws: WebSocket ) =>{
     return undefined;
 }
 
+export const getPlayerSocket = ( _id : string ) =>{
+    for(  const [ id, socket  ] of PLAYERS )
+    {
+        if( id === _id )
+            return socket;
+    }
+}
+
 export const createPlayer = ( id: string, ws: WebSocket ) =>{
     PLAYERS.set( id, ws );
 }
@@ -63,4 +71,11 @@ export const addGame  = ( userA: string, colorA : string, userB: string ) =>{
         colorA,
         instanceId: new Chess()
     })
+}
+
+
+
+export const getGame = ( id: string ) =>{
+    const game  =  ACTIVE_GAMES.find(  game => game.userA ===id || game.userB === id )
+    return game;
 }

@@ -5,13 +5,14 @@ import { Chess, type Piece } from "chess.js";
 import { useGameStore } from "@/store/game.store";
 export function Board()
 {
-    const gameRef =  useRef( new Chess() );
+    // const gameRef =  useRef( new Chess() );
+
     const fen =  useGameStore( state => state.fen );
 
     const onDrop = useCallback(  ({ piece, sourceSquare, targetSquare })=>{
         
             
-            client.send(JSON.stringify({ event:"move", data: { from: sourceSquare, to: targetSquare }}) );
+            client.send( JSON.stringify({ event:"move", data: { from: sourceSquare, to: targetSquare }}) );
             return true;
        
     },[])

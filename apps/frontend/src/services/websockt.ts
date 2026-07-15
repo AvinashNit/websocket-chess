@@ -1,6 +1,6 @@
 interface message  {
     event: string,
-    data?: Record< string, unknown > | string 
+    data?: Record< string, string >
 }
 
 import { useGameStore } from "@/store/game.store";
@@ -21,14 +21,19 @@ class Websocket{
         }
         
         this.ws.onmessage = ( message ) =>{
-            this.handleMessage( JSON.parse( message.data.toString() ));
+            this.handleMessage( JSON.parse( message.data ));
 
         }
     }
 
     handleMessage( message : message ){
-        if( message.event === "update" )
-            useGameStore.getState().setFen( message.data as string );
+        if( message.event === "update-board" )
+        {
+            if( message.data === undefined )
+                return;
+
+            useGameStore.getState().setFen( message.data.move as string );
+        }
 
         if( message.event === "eventId" )
         {
@@ -44,6 +49,11 @@ class Websocket{
                 message: string
             }
             console.log( data.message );
+        }
+
+        if( message.event === "error" )
+        {
+            console.log( "Error from server ", message.data!.error as string )
         }
 
     }
