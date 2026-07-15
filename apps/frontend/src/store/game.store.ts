@@ -6,15 +6,14 @@ import { create } from "zustand";
 interface gameStore {
     gameInstance : Chess,
     fen: string,
-    myturn: boolean,
     setFen : ( fen: string  ) => void ,
-    setTurn : ( turn:boolean ) => void
+    
 
 }
 
 
 
-export const useGameStore = create< gameStore >( ( set, get  ) => {
+export const useGameStore = create< gameStore >( (set) => {
     const game = new Chess();
 
     return {
@@ -25,8 +24,6 @@ export const useGameStore = create< gameStore >( ( set, get  ) => {
             fen : fen 
         }),
 
-        setTurn: ( turn ) => set ({
-            
-        })
+        
     }
 })

@@ -9,21 +9,11 @@ export function Board()
     const fen =  useGameStore( state => state.fen );
 
     const onDrop = useCallback(  ({ piece, sourceSquare, targetSquare })=>{
-        try{
-            const move = gameRef.current.move({
-              from: sourceSquare,
-              to: targetSquare,
-            })
-            console.log( move )
+        
+            
             client.send(JSON.stringify({ event:"move", data: { from: sourceSquare, to: targetSquare }}) );
             return true;
-        }
-        catch( err )
-        {
-
-          console.log( err )
-          return false;
-        }
+       
     },[])
 
     useEffect(()=>{

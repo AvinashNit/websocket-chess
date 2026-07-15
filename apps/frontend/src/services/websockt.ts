@@ -27,8 +27,24 @@ class Websocket{
     }
 
     handleMessage( message : message ){
-        if( message.event === "update")
-            useGameStore.getState().setFen( message.data as string )
+        if( message.event === "update" )
+            useGameStore.getState().setFen( message.data as string );
+
+        if( message.event === "eventId" )
+        {
+            const data  =  message.data as {
+                id: string 
+            }
+            console.log( data.id )
+        }
+
+        if( message.event === "start" )
+        {
+            const data =  message.data as {
+                message: string
+            }
+            console.log( data.message );
+        }
 
     }
 
