@@ -1,11 +1,12 @@
 import { WebSocket } from "ws";
 
 
-export function sendMoveUpdateMessage( ws: WebSocket , data: string  ){
+export function sendMoveUpdateMessage( ws: WebSocket , movedata: string , myturn: boolean   ){
     ws.send( JSON.stringify( {
         event:"update-board",
         data: {
-            move: data
+            move: movedata,
+            myturn:myturn
         }
     }))
 }

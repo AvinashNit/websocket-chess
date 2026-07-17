@@ -1,18 +1,28 @@
 import http from "http";
-const httpServer = http.createServer();
+import express from "express";
 import { Websocketserver } from "./socket.server";
+import { authController } from "./controller/auth.controller";
+import cors from "cors";
 
-  new Websocketserver( httpServer );
 
 
 
-httpServer.on("request", ( req, res )=>{
-   res.end("Rightly hit the endpoint")
+
+const app = express();
+app.use( cors() );
+app.use( express.json() );
+
+app.post("/auth/login", authController.login )
+app.post("/auth/signup", authController.signup)
+
+app.get("/auth/me", authController.authMe );
+
+
+
+const httpServer  =  app.listen( 3000, ()=>{
+  console.log(" Server running over 3000 ")
 })
 
 
 
-httpServer.listen(3000,()=>{
-    console.log("Server started on port 3000")
-})
-
+new Websocketserver( httpServer );

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { client  } from "@/services/websockt";
+import { client  } from "@/services/websocket.service";
 import  { Chessboard }  from "react-chessboard";
 import { Chess, type Piece } from "chess.js";
 import { useGameStore } from "@/store/game.store";
@@ -16,6 +16,8 @@ export function Board()
             return true;
        
     },[])
+
+
 
     useEffect(()=>{
         client.connect();

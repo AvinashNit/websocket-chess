@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   Trophy,
@@ -36,7 +36,7 @@ export  function LandingPage() {
 
                     <div className="mt-10 flex flex-wrap justify-center gap-4">
             <button
-                onClick={() => navigate("/home")}
+                onClick={() => navigate("/play-as-guest")}
                 className="rounded-xl border border-slate-700 px-6 py-3 transition hover:bg-slate-800"
             >
                 Play as Guest
@@ -237,6 +237,7 @@ export  function LandingPage() {
           © 2026 Chess • Built with React, TypeScript & Tailwind CSS
         </footer>
       </main>
+      
     </>
   );
 }

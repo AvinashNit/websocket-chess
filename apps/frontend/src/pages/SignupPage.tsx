@@ -7,7 +7,9 @@ import {
   Lock,
   User, ArrowLeft
 } from "lucide-react";
-import { useState } from "react";
+import { use, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { api } from "@/api";
 
 const Signup = () => {
 
@@ -16,6 +18,26 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [ name, setName ] = useState("");
+  const [ isSignUp , setSignUp ] = useState( false )
+
+  const { signup } =  useAuth();
+
+  async function handleclick()
+  {
+     try{
+        setSignUp( true )
+        await signup( email.trim(), password.trim(), name.trim() );
+        setEmail("");
+        setPassword("");
+        setName("");
+        navigate("/login")
+     }
+     catch( err )
+     {
+        setSignUp( false )
+        console.log( err )
+     }
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 flex">
@@ -155,7 +177,7 @@ const Signup = () => {
 
             </div>
 
-            <button
+            <button onClick={ handleclick }
               className="w-full py-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 transition font-bold text-slate-900"
             >
               Create Account

@@ -1,12 +1,35 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, Crown,ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { api } from "@/api";
+import { useAuth } from "@/hooks/useAuth";
 
 const Login = () => {
+
   const navigate =  useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [ isLogging, setLogging ] = useState( false );
+
+  const  { login } =  useAuth();
+
+  async function handleclick()
+  {
+     setLogging( true );
+      try{
+          await  login(  email.trim(), password.trim() );
+          setEmail("");
+          setPassword("");
+          setLogging( false );
+          navigate("/home")
+      }
+      catch( err )
+      {
+        console.log( "could not logged in  ");
+        setLogging( false )
+      }
+  }
  
 
   return (
@@ -128,7 +151,9 @@ const Login = () => {
 
             </div>
 
-            <button
+            <button type="submit" onClick={(e)=>{
+              e.preventDefault(); 
+              handleclick() } }
               className="w-full py-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 transition font-bold text-slate-900"
             >
               Login

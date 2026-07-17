@@ -61,7 +61,7 @@ export default function PlayerCard({
 
         <button
           disabled={!available}
-          onClick={() => navigate("/play-chess")}
+          onClick={() => navigate("/home/play-chess")}
           className={`flex items-center gap-2 rounded-xl px-5 py-2 font-medium transition-all duration-300 ${
             available
               ? "bg-emerald-500 hover:bg-emerald-600 active:scale-95 cursor-pointerclea"

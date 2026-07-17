@@ -7,6 +7,7 @@ interface gameStore {
     gameInstance : Chess,
     fen: string,
     setFen : ( fen: string  ) => void ,
+    myturn : boolean 
     
 
 }
@@ -18,12 +19,17 @@ export const useGameStore = create< gameStore >( (set) => {
 
     return {
 
-        gameInstance : game,
+        gameInstance : game, 
+        myturn: false,
         fen : game.fen(),
+
         setFen:  ( fen ) => set ({
             fen : fen 
         }),
 
+        setmyturn : ( turn: boolean ) => set ({
+            myturn : turn 
+        })
         
     }
 })

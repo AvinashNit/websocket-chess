@@ -3,7 +3,7 @@ import { sendMoveUpdateMessage , sendError  } from "./server.message.event";
 import WebSocket from "ws";
 import { ACTIVE_GAMES } from "../data/game.data";
 import { getGame, getPlayerId, getPlayerSocket } from "../repo/players.repo";
-
+import * as jwt from "jsonwebtoken";
 
 export type message  = {
     event:messageType
@@ -11,7 +11,7 @@ export type message  = {
 }
 
 
-export type messageType = "start" | "move" |"test"
+export type messageType = "start" | "move" |"test" |"play-as-guest"
 
 export const handleIncomingMessage = ( { message, ws}:{ message: string , ws: WebSocket }) => {
 
@@ -22,18 +22,22 @@ export const handleIncomingMessage = ( { message, ws}:{ message: string , ws: We
         if( parsedMessage.data === undefined )
                return  sendError( ws );
 
+        //extract id from players map based on websocket object
         const id = getPlayerId( ws );
 
         if( id == undefined )
             return;
-
+        //get the game instance of the player
         const game = getGame( id );        
-
+        // player is waiting
         if( game === undefined )
             return;
 
+        //get the legal turn 
+        
         const turn = game.instanceId.turn();
 
+        // check  move is made by correct player
         if( turn === "w" && game.userB === id )
             return;
 
@@ -42,8 +46,14 @@ export const handleIncomingMessage = ( { message, ws}:{ message: string , ws: We
 
         let opponentSocket  : WebSocket | undefined 
 
+        //check if the current player is referred as userA
+        const isIdofA = game.userA === id ? true : false;
+
         if( id === game.userA )
+        {
             opponentSocket = getPlayerSocket( game.userB );
+
+        }
         else
             opponentSocket = getPlayerSocket( game.userA );
 
@@ -62,14 +72,25 @@ export const handleIncomingMessage = ( { message, ws}:{ message: string , ws: We
             if( fen === undefined )
                 return;
 
-            sendMoveUpdateMessage( ws, fen );
-            sendMoveUpdateMessage( opponentSocket!,fen );
+            
+
+            sendMoveUpdateMessage( ws, fen , isIdofA ? false : true   );
+            sendMoveUpdateMessage( opponentSocket!,fen , isIdofA ? true : false );
             
         }
         catch( err  )
         {
             sendError( ws  )
         }
+    }
+
+    if( parsedMessage.event === "play-as-guest")
+    {
+        console.log('got message to start game as a guest ')
+            ws.send( JSON.stringify({
+                event:"yourId",
+                token :   jwt.sign({id:crypto.randomUUID},"secretKey")
+            }))
     }
 
     
